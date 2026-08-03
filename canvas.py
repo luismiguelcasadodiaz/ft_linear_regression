@@ -10,11 +10,16 @@ Tecla 's'       -> guarda los puntos en 'puntos.csv'
 import matplotlib.pyplot as plt
 import csv
 
+from ols import calculate_ols
+
 
 class NubeDePuntos:
     def __init__(self, xlim=(0, 10), ylim=(0, 10)):
         self.puntos_x = []
         self.puntos_y = []
+        self.puntos_x_sum = 0
+        self.puntos_y_sum = 0
+        self.puntos_count = 0
 
         self.fig, self.ax = plt.subplots()
         self.ax.set_xlim(*xlim)
@@ -23,6 +28,7 @@ class NubeDePuntos:
             "Clic izq: añadir | Clic der: deshacer | 'c': limpiar | 's': guardar"
         )
         self.ax.grid(True, linestyle="--", alpha=0.4)
+        self.line = None  # Regression line that updates dinamically
 
         # scatter vacío al principio, se actualiza con set_offsets
         self.scatter = self.ax.scatter([], [], color="tab:blue", s=40)
@@ -40,10 +46,16 @@ class NubeDePuntos:
         if event.button == 1:  # clic izquierdo
             self.puntos_x.append(event.xdata)
             self.puntos_y.append(event.ydata)
+            self.puntos_x_sum += event.xdata
+            self.puntos_y_sum += event.ydata
+            self.puntos_count += 1
         elif event.button == 3:  # clic derecho
             if self.puntos_x:
+                self.puntos_x_sum -= self.puntos_x[-1]
+                self.puntos_y_sum -= self.puntos_y[-1]
                 self.puntos_x.pop()
                 self.puntos_y.pop()
+                self.puntos_count -= 1
 
         self.actualizar()
 
@@ -52,29 +64,47 @@ class NubeDePuntos:
         if event.key == "c":
             self.puntos_x.clear()
             self.puntos_y.clear()
+            self.puntos_count = 0
             self.actualizar()
         elif event.key == "s":
             self.guardar_csv()
 
     def actualizar(self):
-        datos = list(zip(self.puntos_x, self.puntos_y))
-        self.scatter.set_offsets(datos)
+        if self.puntos_x:
+            datos = list(zip(self.puntos_x, self.puntos_y))
+            self.scatter.set_offsets(datos)
+            if self.puntos_count > 1:  # Solo dibujar la línea si hay al menos 2 puntos
+                slope, intercept_y = calculate_ols(self.puntos_x, self.puntos_y)
+                self.unset_line()  # Remove previous regression line if exists
+                self.set_line(intercept_y, slope, color="tab:red")
+        else:
+            self.scatter.remove()
+            self.unset_line()  # Remove previous regression line if exists
+            self.scatter = self.ax.scatter([], [], color="tab:blue", s=40)
+
+
         self.fig.canvas.draw_idle()
 
     def add_point(self, xdata, ydata):
         self.puntos_x.append(xdata)
         self.puntos_y.append(ydata)
 
-    def dibujar_linea(self, corte_y, pendiente, color="tab:red"):
+    def set_line(self, intercept_y, slope, color="tab:red"):
         """
-        Dibuja la recta y = pendiente * x + corte_y sobre los ejes actuales.
+        Dibuja la recta y = slope * x + intercept_y sobre los ejes actuales.
 
         Parámetros:
-            corte_y   -- punto de corte con el eje y (ordenada en el origen, b)
-            pendiente -- pendiente de la recta (m)
+            intercept_y   -- punto de corte con el eje y (ordenada en el origen, b)
+            slope -- pendiente de la recta (m)
         """
-        self.ax.axline((0, corte_y), slope=pendiente, color=color, linewidth=1.5)
+        self.line = self.ax.axline((0, intercept_y), slope=slope, color=color, linewidth=1.5)
         self.fig.canvas.draw_idle()
+
+    def unset_line(self):
+        """Removes regression line if exists."""
+        if self.line:
+            self.line.remove()
+            self.line = None
 
     def guardar_csv(self, ruta="puntos.csv"):
         with open(ruta, "w", newline="") as f:
@@ -89,5 +119,4 @@ class NubeDePuntos:
 
 if __name__ == "__main__":
     nube = NubeDePuntos(xlim=(0, 250000), ylim=(0, 10000))
-    nube.dibujar_linea(corte_y=2, pendiente=0.5)  # y = 0.5x + 2
     plt.show()
