@@ -75,6 +75,7 @@ class NubeDePuntos:
             self.scatter.set_offsets(datos)
             if self.puntos_count > 1:  # Solo dibujar la línea si hay al menos 2 puntos
                 slope, intercept_y = calculate_ols(self.puntos_x, self.puntos_y)
+                #slope, intercept_y = calculate_gd(self.puntos_x, self.puntos_y)
                 self.unset_line()  # Remove previous regression line if exists
                 self.set_line(intercept_y, slope, color="tab:red")
         else:
