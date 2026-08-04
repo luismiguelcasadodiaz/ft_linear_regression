@@ -37,10 +37,10 @@ except ValueError:
     print(f"Error: The file '{points_file}' contains invalid data.")
     exit(1) 
 
-theta_1, theta_0 = calculate_ols(puntos_x, puntos_y)
+theta_0, theta_1 = calculate_ols(puntos_x, puntos_y)
 print(f"Ordinary Least Squares Calculated thetas: theta_0 (intercept) = {theta_0}, theta_1 (slope) = {theta_1}")   
 
-theta_1, theta_0 = calculate_gd(puntos_x, puntos_y)
+theta_0, theta_1 = calculate_gd(puntos_x, puntos_y)
 print(f"Gradient Descent Calculated thetas: theta_0 (intercept) = {theta_0}, theta_1 (slope) = {theta_1}")   
 thetas_file = "thetas.csv"
 try:

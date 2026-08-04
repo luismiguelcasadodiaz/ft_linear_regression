@@ -15,6 +15,11 @@ predict: ## Predict car price form car's kilometers
 train: ## Train model with data from data.csv
 	python3 train.py
 
+.PHONY: compare
+compare: ## Compare OLS and GD methods
+	python3 comparacion_regresion.py	
+
+
 .PHONY: showdata
 showdata: ## sort
 	@head -n 1 data.csv; tail -n +2 data.csv | sort -t ',' -k1,1n

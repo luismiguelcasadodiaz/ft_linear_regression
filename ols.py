@@ -40,4 +40,4 @@ def calculate_ols(puntos_x, puntos_y)-> tuple[float, float]:
     slope = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x ** 2)
     intercept_y = (sum_y - slope * sum_x) / n
 
-    return slope, intercept_y
+    return intercept_y, slope 

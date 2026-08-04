@@ -25,22 +25,43 @@ def calculate_gd(puntos_x, puntos_y)-> tuple[float, float]:
             slope -- slope of the line (m)
             intercept_y   -- point of intersection with the y-axis (b)
     """
+    x_min, x_max = min(puntos_x), max(puntos_x)
+    x_range = x_max - x_min
+    if x_range == 0:
+        raise ValueError("All x values are the same. Cannot perform gradient descent.")
+
+    y_min, y_max = min(puntos_y), max(puntos_y)
+    y_range = max(puntos_y) - min(puntos_y)
+    if y_range == 0:
+        raise ValueError("All y values are the same. Cannot perform gradient descent.")
+
+    x_normalized = [(x - x_min) / (x_max - x_min) for x in puntos_x]
+    y_normalized = [(y - y_min) / (y_max - y_min) for y in puntos_y]
+
     n = len(puntos_x)
     if n <= 1:
         raise ValueError("No hay puntos para calcular la regresión.")
     slope_n, intercept_y_n = 0.0, 0.0
     slope_n_1, intercept_y_n_1 = 0.0, 0.0
-    learning_rate = 0.01
-    for _ in range(1000):  # Number of iterations
-        y_pred = [slope_n * x + intercept_y_n for x in puntos_x]
-        print(f"Iteration {_}: slope = {slope_n}, intercept_y = {intercept_y_n}, y_pred = {y_pred}")
-        error = [y - y_hat for y, y_hat in zip(puntos_y, y_pred)]
-        slope_gradient = (-2/n) * sum(x * e for x, e in zip(puntos_x, error))
-        intercept_gradient = (-2/n) * sum(error)
+    learning_rate = 0.1
+    for _ in range(10000):  # Number of iterations
+        y_pred = [slope_n * x + intercept_y_n for x in x_normalized]
+        error = [y - y_hat for y, y_hat in zip(y_normalized, y_pred)]
+        slope_gradient = (-1/n) * sum(x * e for x, e in zip(x_normalized, error))
+        intercept_gradient = (-1/n) * sum(error)
         slope_n_1 -= learning_rate * slope_gradient
         intercept_y_n_1 -= learning_rate * intercept_gradient
-        if math.isclose(slope_n_1, slope_n, abs_tol=1e-9):
+        print(f"Iteration {_}: slope = {slope_n_1}, intercept_y = {intercept_y_n}, error = {abs(slope_n_1 - slope_n)}")
+        if abs(slope_n_1 - slope_n) < 1e-6:
+            break
+        if slope_n_1 == float('inf') or intercept_y_n_1 == float('inf'):
+            print("Error: The gradient descent algorithm diverged.")
+            slope_n_1, intercept_y_n_1 = slope_n, intercept_y_n  # Reset to previous values
             break
         slope_n = slope_n_1
         intercept_y_n = intercept_y_n_1
-    return slope_n_1, intercept_y_n_1
+    slop_denormalized = slope_n_1 * (y_range / x_range)
+    intercept_y_denormalized = intercept_y_n_1 * y_range + y_min - slop_denormalized * x_min
+    return intercept_y_denormalized, slop_denormalized
+
+    
