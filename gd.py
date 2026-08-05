@@ -41,27 +41,31 @@ def calculate_gd(puntos_x, puntos_y)-> tuple[float, float]:
     n = len(puntos_x)
     if n <= 1:
         raise ValueError("No hay puntos para calcular la regresión.")
-    slope_n, intercept_y_n = 0.0, 0.0
-    slope_n_1, intercept_y_n_1 = 0.0, 0.0
+    slope_n, intercept_y_n, slope_denormalized = 0.0, 0.0, 0.0
+    slope_n_1, intercept_y_n_1, intercept_y_denormalized  = 0.0, 0.0, 0.0
     learning_rate = 0.1
     for _ in range(10000):  # Number of iterations
         y_pred = [slope_n * x + intercept_y_n for x in x_normalized]
         error = [y - y_hat for y, y_hat in zip(y_normalized, y_pred)]
+
         slope_gradient = (-1/n) * sum(x * e for x, e in zip(x_normalized, error))
         intercept_gradient = (-1/n) * sum(error)
+
         slope_n_1 -= learning_rate * slope_gradient
         intercept_y_n_1 -= learning_rate * intercept_gradient
+
         print(f"Iteration {_}: slope = {slope_n_1}, intercept_y = {intercept_y_n}, error = {abs(slope_n_1 - slope_n)}")
         if abs(slope_n_1 - slope_n) < 1e-6:
+            slope_n = slope_n_1
+            intercept_y_n = intercept_y_n_1
             break
-        if slope_n_1 == float('inf') or intercept_y_n_1 == float('inf'):
-            print("Error: The gradient descent algorithm diverged.")
-            slope_n_1, intercept_y_n_1 = slope_n, intercept_y_n  # Reset to previous values
-            break
-        slope_n = slope_n_1
+
+        slope_n = slope_n_1     
         intercept_y_n = intercept_y_n_1
+
     slop_denormalized = slope_n_1 * (y_range / x_range)
     intercept_y_denormalized = intercept_y_n_1 * y_range + y_min - slop_denormalized * x_min
+    
     return intercept_y_denormalized, slop_denormalized
 
     
