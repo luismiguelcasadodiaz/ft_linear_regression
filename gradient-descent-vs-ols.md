@@ -101,7 +101,7 @@ This is the trickiest part to get right in practice:
 - **Too large**: you overshoot the minimum, and the algorithm can oscillate or even diverge (the error gets *worse* each iteration instead of better).
 - **Just right**: steady, efficient convergence toward the minimum.
 
-A common practical technique (especially relevant for the 42 `ft_linear_regression` project) is to **normalize your data first** (e.g., scale $x$ and $y$ to a similar range, like $[0,1]$ or zero mean/unit variance). Raw mileage values (tens of thousands) and raw price values (thousands) have very different scales, which distorts the shape of the cost surface and makes it hard to pick a single $\alpha$ that works well for both $m$ and $b$.
+A common practical technique is to **normalize your data first** (e.g., scale $x$ and $y$ to a similar range, like $[0,1]$ or zero mean/unit variance). Raw mileage values (tens of thousands) and raw price values (thousands) have very different scales, which distorts the shape of the cost surface and makes it hard to pick a single $\alpha$ that works well for both $m$ and $b$.
 
 ---
 
