@@ -200,7 +200,7 @@ A middle ground: split the data into small batches (e.g., 32 points at a time), 
 | Good for small datasets | ✅ Simplest & most stable | Overkill, unnecessary noise | Overkill |
 | Good for huge datasets / deep learning | Too slow (one giant gradient per step) | ✅ Common, but noisy | ✅ Most common in practice |
 
-For a small, two-parameter problem like fitting mileage vs. price (as in the 42 `ft_linear_regression` project), **batch gradient descent** is the right and expected choice — simpler to implement, easier to debug, and it converges reliably since $J(m,b)$ is convex.
+For a small, two-parameter problem like fitting mileage vs. price, **batch gradient descent** is the right and expected choice — simpler to implement, easier to debug, and it converges reliably since $J(m,b)$ is convex.
 
 ---
 
