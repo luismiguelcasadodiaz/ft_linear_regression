@@ -101,7 +101,7 @@ This is the trickiest part to get right in practice:
 - **Too large**: you overshoot the minimum, and the algorithm can oscillate or even diverge (the error gets *worse* each iteration instead of better).
 - **Just right**: steady, efficient convergence toward the minimum.
 
-A common practical technique (especially relevant for the 42 `ft_linear_regression` project) is to **normalize your data first** (e.g., scale $x$ and $y$ to a similar range, like $[0,1]$ or zero mean/unit variance). Raw mileage values (tens of thousands) and raw price values (thousands) have very different scales, which distorts the shape of the cost surface and makes it hard to pick a single $\alpha$ that works well for both $m$ and $b$.
+A common practical technique is to **normalize your data first** (e.g., scale $x$ and $y$ to a similar range, like $[0,1]$ or zero mean/unit variance). Raw mileage values (tens of thousands) and raw price values (thousands) have very different scales, which distorts the shape of the cost surface and makes it hard to pick a single $\alpha$ that works well for both $m$ and $b$.
 
 ---
 
@@ -200,7 +200,7 @@ A middle ground: split the data into small batches (e.g., 32 points at a time), 
 | Good for small datasets | ✅ Simplest & most stable | Overkill, unnecessary noise | Overkill |
 | Good for huge datasets / deep learning | Too slow (one giant gradient per step) | ✅ Common, but noisy | ✅ Most common in practice |
 
-For a small, two-parameter problem like fitting mileage vs. price (as in the 42 `ft_linear_regression` project), **batch gradient descent** is the right and expected choice — simpler to implement, easier to debug, and it converges reliably since $J(m,b)$ is convex.
+For a small, two-parameter problem like fitting mileage vs. price, **batch gradient descent** is the right and expected choice — simpler to implement, easier to debug, and it converges reliably since $J(m,b)$ is convex.
 
 ---
 
