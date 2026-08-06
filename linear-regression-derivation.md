@@ -111,3 +111,6 @@ Points: (1,2), (2,3), (3,5), (4,4), (5,6)
 - $b = 4 - 0.9 \times 3 = 1.3$
 
 **Fitted line:** $y = 0.9x + 1.3$
+
+
+[return](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/README.md)
