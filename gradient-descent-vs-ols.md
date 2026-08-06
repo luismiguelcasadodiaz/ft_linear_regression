@@ -291,3 +291,7 @@ Once $\theta_0, \theta_1$ are denormalized (real mileage/price scale), $R^2$ is 
 ## 11. Connecting Back to Your `ft_linear_regression` Warning
 
 The `RuntimeWarning: invalid value encountered in scalar divide` you hit with OLS happens because the closed-form formula has a denominator that can become exactly zero (no variance in $x$). Gradient descent has no such division — it never breaks down that way, since it just follows the slope of $J$ at each step. That's part of why gradient descent is often the more robust and general-purpose choice, even though for simple 2-parameter linear regression, OLS is normally the faster and simpler option when your data is well-behaved.
+
+
+[return](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/README.md)
+
