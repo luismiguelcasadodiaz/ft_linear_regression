@@ -26,5 +26,6 @@ set                  Set a python environmen for this proyect
 unset                removes the python 
 upgrade              Upgrades pip
 ```
-[Ordinary least squares](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/linear-regression-derivation.md)
-[Gradient Descent](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/gradient-descent-vs-ols.md)
+[Ordinary least squares README](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/linear-regression-derivation.md)
+
+[Gradient Descent README](https://github.com/luismiguelcasadodiaz/ft_linear_regression/blob/main/gradient-descent-vs-ols.md)
